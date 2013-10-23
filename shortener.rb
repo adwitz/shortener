@@ -33,18 +33,34 @@ end
 ###########################################################
 # Routes
 ###########################################################
-
 get '/' do
-    @links = [] # FIXME
-    erb :index
+  @links = Link.select("short_url")
+  erb :index
 end
 
 get '/new' do
-    erb :form
+  erb :form
 end
 
 post '/new' do
-    # PUT CODE HERE TO CREATE NEW SHORTENED LINKS
+	if Link.exists?(url: params[:url])
+		@links = Link.select("short_url")
+		erb :index
+	else
+		# PUT CODE HERE TO CREATE NEW SHORTENED LINKS
+		@url = params[:url]
+		rand = rand(url.length-5)
+		@short_url = @url.split("").slice(3, 8).join("")
+	  erb :layout do Link.create(url: @url, short_url: @short_url) end 
+	end
 end
 
 # MORE ROUTES GO HERE
+
+get '/:short_url' do
+	short_url = Link.where(short_url: params[:short_url])[0].url
+  redirect short_url
+end
+
+
+

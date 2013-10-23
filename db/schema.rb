@@ -10,6 +10,14 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130110054237) do
+ActiveRecord::Schema.define(:version => 20131022231107) do
+
+  create_table "links", :force => true do |t|
+    t.string "url"
+    t.string "short_url"
+  end
+
+  add_index "links", ["short_url"], :name => "index_links_on_short_url"
+  add_index "links", ["url"], :name => "index_links_on_url"
 
 end
